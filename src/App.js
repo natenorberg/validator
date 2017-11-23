@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {teal500, teal700} from 'material-ui/styles/colors';
-import {AppBar} from 'material-ui';
+import {AppBar, Card, CardHeader, CardText} from 'material-ui';
 import Form from './Form';
 import './App.css';
 
@@ -19,7 +19,12 @@ class App extends Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div class="App">
           <AppBar />
-          <Form />
+          <Card className="beerForm">
+            <CardHeader>Beer Info</CardHeader>
+            <CardText>
+              <Form />
+            </CardText>
+          </Card>
         </div>
       </MuiThemeProvider>
     );

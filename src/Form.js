@@ -41,26 +41,23 @@ export class Form extends React.Component<{}, FormState> {
 
   render() {
     return (
-      <Card style={{margin: '32px 64px'}} className="beerForm">
-        <CardHeader>Beer Info</CardHeader>
-        <CardText>
-          <div className="field">
-            <TextField hintText="Name" value={this.state.name} onChange={this.setName} />
-          </div>
-          <div className="field">
-            <TextField
-              hintText="Favorite Beer"
-              value={this.state.favoriteBeer}
-              onChange={this.setFavoriteBeer}
-            />
-          </div>
-          <div className="field">
-            <TextField hintText="Age" value={this.state.age} onChange={this.setAge} />
-          </div>
-          <div>
-            <RaisedButton label="Submit" primary style={{marginTop: 8}} onClick={this.submitForm} />
-          </div>
-        </CardText>
+      <div className="Form">
+        <div className="field">
+          <TextField hintText="Name" value={this.state.name} onChange={this.setName} />
+        </div>
+        <div className="field">
+          <TextField
+            hintText="Favorite Beer"
+            value={this.state.favoriteBeer}
+            onChange={this.setFavoriteBeer}
+          />
+        </div>
+        <div className="field">
+          <TextField hintText="Age" value={this.state.age} onChange={this.setAge} />
+        </div>
+        <div>
+          <RaisedButton label="Submit" primary style={{marginTop: 8}} onClick={this.submitForm} />
+        </div>
 
         <Dialog
           open={this.state.submitted}
@@ -69,7 +66,7 @@ export class Form extends React.Component<{}, FormState> {
         >
           We've recorded this somewhere
         </Dialog>
-      </Card>
+      </div>
     );
   }
 }
