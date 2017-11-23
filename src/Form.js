@@ -1,17 +1,19 @@
 // @flow
 import * as React from 'react';
-import {Card, CardHeader, CardText, TextField} from 'material-ui';
+import {Card, CardHeader, CardText, TextField, RaisedButton, Dialog} from 'material-ui';
 
 type FormState = {
   name: string,
   favoriteBeer: string,
   age?: number,
+  submitted: boolean,
 };
 
 export class Form extends React.Component<{}, FormState> {
   state = {
     name: '',
     favoriteBeer: '',
+    submitted: false,
   };
 
   setName = (e: SyntheticInputEvent, name: string) => {
@@ -27,6 +29,14 @@ export class Form extends React.Component<{}, FormState> {
     if (!isNaN(age)) {
       this.setState(() => ({age}));
     }
+  };
+
+  submitForm = () => {
+    this.setState(() => ({submitted: true}));
+  };
+
+  closeSubmitConfirmation = () => {
+    this.setState(() => ({submitted: false}));
   };
 
   render() {
@@ -47,7 +57,18 @@ export class Form extends React.Component<{}, FormState> {
           <div className="field">
             <TextField hintText="Age" value={this.state.age} onChange={this.setAge} />
           </div>
+          <div>
+            <RaisedButton label="Submit" primary style={{marginTop: 8}} onClick={this.submitForm} />
+          </div>
         </CardText>
+
+        <Dialog
+          open={this.state.submitted}
+          title="Form submitted"
+          onRequestClose={this.closeSubmitConfirmation}
+        >
+          We've recorded this somewhere
+        </Dialog>
       </Card>
     );
   }
