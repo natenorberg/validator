@@ -8,6 +8,8 @@ type ValidationRule<T> = (value: T) => ValidationErrors | null;
 type ValidatorChildProps = {
   value: T,
   errors: ValidationErrors | null,
+  touched: boolean,
+  valid: boolean,
 };
 
 export type ValidatorProps<T> = {
@@ -16,7 +18,19 @@ export type ValidatorProps<T> = {
   children: (childProps: ValidatorChildProps) => React.ReactNode,
 };
 
-export class Validator extends React.Component<ValidatorProps<*>, ValidatorState<*>> {
+type ValidatorState = {
+  touched: boolean,
+};
+
+export class Validator extends React.Component<ValidatorProps<*>, ValidatorState> {
+  state = {
+    touched: false,
+  };
+
+  markFieldTouched = () => {
+    this.setState({touched: true});
+  };
+
   getErrors = () => {
     const {value, rules} = this.props;
 
@@ -30,9 +44,15 @@ export class Validator extends React.Component<ValidatorProps<*>, ValidatorState
 
   render() {
     const {value} = this.props;
+    const {touched} = this.state;
     const errors = this.getErrors();
+    const valid = !errors;
 
-    return this.props.children({value, errors});
+    return (
+      <div className="Validator" onBlur={this.markFieldTouched}>
+        {this.props.children({value, errors, touched, valid})}
+      </div>
+    );
   }
 }
 

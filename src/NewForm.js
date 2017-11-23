@@ -122,14 +122,17 @@ export class Form extends React.Component<{}, FormState> {
     });
   };
 
+  renderStatusEmoji = (valid: boolean) => (valid ? '😃' : '😩');
+
   render() {
     return (
       <div className="Form">
         <NewValidator value={this.state.name} rules={[requiredField('Name')]}>
-          {({value, errors}) => (
+          {({value, errors, touched, valid}) => (
             <div className="field">
+              {this.renderStatusEmoji(valid)}
               <TextField hintText="Name" value={value} onChange={this.setName} />
-              {this.renderValidationErrors(errors)}
+              {touched && this.renderValidationErrors(errors)}
             </div>
           )}
         </NewValidator>
@@ -137,18 +140,20 @@ export class Form extends React.Component<{}, FormState> {
           value={this.state.favoriteBeer}
           rules={[requiredField('Favorite beer'), noLiteBeer]}
         >
-          {({value, errors}) => (
+          {({value, errors, touched, valid}) => (
             <div className="field">
+              {this.renderStatusEmoji(valid)}
               <TextField hintText="Favorite Beer" value={value} onChange={this.setFavoriteBeer} />
-              {this.renderValidationErrors(errors)}
+              {touched && this.renderValidationErrors(errors)}
             </div>
           )}
         </NewValidator>
         <NewValidator value={this.state.age} rules={[requiredField('Age'), legalDrinker]}>
-          {({value, errors}) => (
+          {({value, errors, touched, valid}) => (
             <div className="field">
+              {this.renderStatusEmoji(valid)}
               <TextField hintText="Age" type="number" value={value} onChange={this.setAge} />
-              {this.renderValidationErrors(errors)}
+              {touched && this.renderValidationErrors(errors)}
             </div>
           )}
         </NewValidator>
