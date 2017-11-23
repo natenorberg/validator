@@ -9,3 +9,11 @@
   margin: 32px 64px;
   padding: 32px;
 }
+
+.forms {
+  display: flex;
+}
+
+.Form {
+  margin: 0 64px;
+}

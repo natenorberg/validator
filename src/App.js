@@ -4,6 +4,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {teal500, teal700} from 'material-ui/styles/colors';
 import {AppBar, Card, CardHeader, CardText} from 'material-ui';
 import OldForm from './OldForm';
+import NewForm from './NewForm';
 import './App.css';
 
 const muiTheme = getMuiTheme({
@@ -22,7 +23,10 @@ class App extends Component {
           <Card className="beerForm">
             <CardHeader>Beer Info</CardHeader>
             <CardText>
-              <OldForm />
+              <div className="forms">
+                <OldForm />
+                <NewForm />
+              </div>
             </CardText>
           </Card>
         </div>

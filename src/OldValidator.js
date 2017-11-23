@@ -1,25 +1,7 @@
 // @flow
 import * as React from 'react';
 import classnames from 'classnames';
-
-/**
- * Stub out formatMessage so that it will return the defaultMessage with basic variable replacement
- */
-export const formatMessage = (msg: IntlMessage, values?: {[key: string]: string}) => {
-  if (!values) {
-    return msg.defaultMessage;
-  }
-
-  let returnValue = msg.defaultMessage;
-  Object.keys(values).forEach(key => {
-    if (values) {
-      const value = values[key];
-      returnValue = returnValue.replace(`{${key}}`, value);
-    }
-  });
-
-  return returnValue;
-};
+import formatMessage from './formatMessage';
 
 type IntlMessage = {
   id: string,
@@ -95,7 +77,6 @@ export default class Validator extends React.Component<ValidatorProps<*>, Valida
       (e: ValidationErrors | null, rule: ValidationRule<*>) => e || rule(value),
       null,
     );
-    console.log(errors);
 
     this.valid = !errors;
     return errors;
