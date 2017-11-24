@@ -92,7 +92,7 @@ export class Form extends React.Component<{}, FormState> {
   };
 
   isValid = () => {
-    return this.state.favoriteBeerValid;
+    return this.state.nameValid && this.state.favoriteBeerValid && this.state.ageValid;
   };
 
   render() {

@@ -90,11 +90,9 @@ export class Form extends React.Component<{}, FormState> {
     if (!errors) {
       return null;
     }
-    console.log(errors);
 
     return Object.keys(errors).map(key => {
       const error = errors[key];
-      console.log(key, error);
 
       return <div style={errorTextStyle}>{formatMessage(messages[key], error)}</div>;
     });
