@@ -1,20 +1,17 @@
 // @flow
 import * as React from 'react';
 import {TextField, RaisedButton, Dialog} from 'material-ui';
-import NewValidator from './NewValidator';
+import {ValidationField, ValidationGroup} from './NewValidator';
 import formatMessage from './formatMessage';
+
+type ValidationErrors = {[key: string]: Object}; // TODO: Check object shape somehow
 
 type FormState = {
   name: string,
   favoriteBeer: string,
   age?: number,
   submitted: boolean,
-  nameValid: boolean,
-  favoriteBeerValid: boolean,
-  ageValid: boolean,
 };
-
-type ValidationErrors = {[key: string]: Object}; // TODO: Check object shape somehow
 
 const errorTextStyle = {
   color: 'red',
@@ -64,25 +61,14 @@ export class Form extends React.Component<{}, FormState> {
     name: '',
     favoriteBeer: '',
     submitted: false,
-    nameValid: false,
-    favoriteBeerValid: false,
-    ageValid: false,
   };
 
   setName = (e: SyntheticInputEvent, name: string) => {
     this.setState(() => ({name}));
   };
 
-  setNameValid = (valid: boolean) => {
-    this.setState(() => ({nameValid: valid}));
-  };
-
   setFavoriteBeer = (e: SyntheticInputEvent, favoriteBeer: string) => {
     this.setState(() => ({favoriteBeer}));
-  };
-
-  setFavoriteBeerValid = (valid: boolean) => {
-    this.setState(() => ({favoriteBeerValid: valid}));
   };
 
   setAge = (e: SyntheticInputEvent, ageString: string) => {
@@ -92,20 +78,12 @@ export class Form extends React.Component<{}, FormState> {
     }
   };
 
-  setAgeValid = (valid: boolean) => {
-    this.setState(() => ({ageValid: valid}));
-  };
-
   submitForm = () => {
     this.setState(() => ({submitted: true}));
   };
 
   closeSubmitConfirmation = () => {
     this.setState(() => ({submitted: false}));
-  };
-
-  isValid = () => {
-    return this.state.favoriteBeerValid;
   };
 
   renderValidationErrors = (errors: ValidationErrors | null) => {
@@ -122,59 +100,73 @@ export class Form extends React.Component<{}, FormState> {
     });
   };
 
-  renderStatusEmoji = (valid: boolean) => (valid ? '😃' : '😩');
+  renderStatusEmoji = (valid: boolean) => (valid ? '😃 ' : '😩 ');
 
   render() {
-    return (
-      <div className="Form">
-        <NewValidator value={this.state.name} rules={[requiredField('Name')]}>
-          {({value, errors, touched, valid}) => (
-            <div className="field">
-              {this.renderStatusEmoji(valid)}
-              <TextField hintText="Name" value={value} onChange={this.setName} />
-              {touched && this.renderValidationErrors(errors)}
-            </div>
-          )}
-        </NewValidator>
-        <NewValidator
-          value={this.state.favoriteBeer}
-          rules={[requiredField('Favorite beer'), noLiteBeer]}
-        >
-          {({value, errors, touched, valid}) => (
-            <div className="field">
-              {this.renderStatusEmoji(valid)}
-              <TextField hintText="Favorite Beer" value={value} onChange={this.setFavoriteBeer} />
-              {touched && this.renderValidationErrors(errors)}
-            </div>
-          )}
-        </NewValidator>
-        <NewValidator value={this.state.age} rules={[requiredField('Age'), legalDrinker]}>
-          {({value, errors, touched, valid}) => (
-            <div className="field">
-              {this.renderStatusEmoji(valid)}
-              <TextField hintText="Age" type="number" value={value} onChange={this.setAge} />
-              {touched && this.renderValidationErrors(errors)}
-            </div>
-          )}
-        </NewValidator>
-        <div>
-          <RaisedButton
-            label="Submit"
-            primary
-            style={{marginTop: 8}}
-            onClick={this.submitForm}
-            disabled={!this.isValid()}
-          />
-        </div>
+    const {name, favoriteBeer, age} = this.state;
 
-        <Dialog
-          open={this.state.submitted}
-          title="Form submitted"
-          onRequestClose={this.closeSubmitConfirmation}
-        >
-          We've recorded this somewhere
-        </Dialog>
-      </div>
+    return (
+      <ValidationGroup
+        rules={{
+          name: [requiredField('Name')],
+          favoriteBeer: [requiredField('Favorite beer'), noLiteBeer],
+          age: [requiredField('Age'), legalDrinker],
+        }}
+        values={{name, favoriteBeer, age}}
+      >
+        {({valid}) => (
+          <div className="Form">
+            <ValidationField name="name">
+              {({value, errors, touched, valid}) => (
+                <div className="field">
+                  {this.renderStatusEmoji(valid)}
+                  <TextField hintText="Name" value={value} onChange={this.setName} />
+                  {touched && this.renderValidationErrors(errors)}
+                </div>
+              )}
+            </ValidationField>
+            <ValidationField name="favoriteBeer">
+              {({value, errors, touched, valid}) => (
+                <div className="field">
+                  {this.renderStatusEmoji(valid)}
+                  <TextField
+                    hintText="Favorite Beer"
+                    value={value}
+                    onChange={this.setFavoriteBeer}
+                  />
+                  {touched && this.renderValidationErrors(errors)}
+                </div>
+              )}
+            </ValidationField>
+            <ValidationField name="age">
+              {({value, errors, touched, valid}) => (
+                <div className="field">
+                  {this.renderStatusEmoji(valid)}
+                  <TextField hintText="Age" type="number" value={value} onChange={this.setAge} />
+                  {touched && this.renderValidationErrors(errors)}
+                </div>
+              )}
+            </ValidationField>
+            <div>
+              <RaisedButton
+                label="Submit"
+                primary
+                style={{marginTop: 8}}
+                onClick={this.submitForm}
+                disabled={!valid}
+              />
+            </div>
+
+            <Dialog
+              open={this.state.submitted}
+              title="Form submitted"
+              onRequestClose={this.closeSubmitConfirmation}
+            >
+              We've recorded this somewhere
+            </Dialog>
+          </div>
+        )}
+      </ValidationGroup>
     );
   }
 }
