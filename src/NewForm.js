@@ -132,7 +132,17 @@ export class Form extends React.Component<{}, FormState> {
                     value={value}
                     onChange={this.setFavoriteBeer}
                   />
-                  {touched && this.renderValidationErrors(errors)}
+                  {touched &&
+                    errors &&
+                    errors.required && (
+                      <div style={errorTextStyle}>
+                        {formatMessage(messages.required, {field: 'Favorite Beer'})}
+                      </div>
+                    )}
+                  {errors &&
+                    errors.noLiteBeer && (
+                      <div style={errorTextStyle}>{formatMessage(messages.noLiteBeer)}</div>
+                    )}
                 </div>
               )}
             </ValidationField>
