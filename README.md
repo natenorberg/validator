@@ -76,9 +76,13 @@ component defining the render prop.
 ## Things to do before open sourcing it
 
 * [ ] Hook up our apps to use it
-* [ ] Namespace context so there can be multiple forms in a hierarchy
-* [ ] Allow composing validation groups (if we have part of a form in a sub-component)
+* [ ] Namespace context so there can be multiple forms in a hierarchy (or just to reduce collisions)
 * [ ] Find a good name for it (`checkmate` was taken 😩)
+
+## Nice to haves
+
+* [ ] Allow composing validation groups (if we have part of a form in a sub-component)
+* [ ] Find a way to set rules on the field itself rather than a whole form at a time
 
 ## Try it out
 
