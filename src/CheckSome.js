@@ -10,7 +10,7 @@ type ValidationErrors = {[key: string]: Object}; // TODO: Check object shape som
 type ValidationRule<T> = (value: T) => ValidationErrors | null;
 
 type ValidationGroupRules = {[name: string]: Array<ValidationRule<*>>};
-type ValidationGroupErrors = {[name: string]: ValidationErrors};
+type ValidationGroupErrors = {[name: string]: ValidationErrors} | null;
 
 type CheckSomeFieldChildProps<T> = {
   value: T,
@@ -60,7 +60,7 @@ export class CheckSomeField extends React.Component<CheckSomeFieldProps, CheckSo
 export type CheckSomeChildProps = {
   valid: boolean,
   changed: boolean,
-  errors: {[name: string]: ValidationErrors} | null,
+  errors: ValidationGroupErrors,
 };
 
 export type CheckSomeProps = {
@@ -99,7 +99,7 @@ export default class CheckSome extends React.Component<CheckSomeProps> {
     return this.initialValues;
   };
 
-  getErrors = () =>
+  getErrors = (): ValidationGroupErrors =>
     Object.keys(this.props.rules).reduce((errors, key) => {
       const rules = this.props.rules[key];
       const value = this.props.values[key];
