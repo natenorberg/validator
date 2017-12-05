@@ -9,17 +9,61 @@ type ValidationRule<T> = (value: T) => ValidationErrors | null;
 type ValidationGroupRules = {[name: string]: Array<ValidationRule<*>>};
 type ValidationGroupErrors = {[name: string]: ValidationErrors};
 
-export type ValidationGroupProps = {
+type CheckSomeFieldProps<T> = {
+  name: string,
+  value: T,
+};
+
+type CheckSomeFieldChildProps = {
+  value: T,
+  errors: ValidationErrors | null,
+  touched: boolean,
+  valid: boolean,
+};
+
+export class CheckSomeField extends React.Component<CheckSomeFieldProps<*>> {
+  state = {
+    touched: false,
+  };
+
+  static contextTypes = {
+    values: PropTypes.object.isRequired,
+    errors: PropTypes.object,
+  };
+
+  markFieldTouched = () => {
+    this.setState({touched: true});
+  };
+
+  render() {
+    const {values, errors: formErrors} = this.context;
+    const {name} = this.props;
+    const {touched} = this.state;
+    const value = values[name];
+    const errors = formErrors ? formErrors[name] : null;
+    const valid = !errors;
+
+    return (
+      <div className="Validator" onBlur={this.markFieldTouched}>
+        {this.props.children({value, errors, touched, valid})}
+      </div>
+    );
+  }
+}
+
+export type CheckSomeProps = {
   rules: ValidationGroupRules,
   values: Object, // TODO: Get a better type here
 };
 
-export type ValidationGroupChildProps = {
+export type CheckSomeChildProps = {
   valid: boolean,
   errors: {[name: string]: ValidationErrors} | null,
 };
 
-export class ValidationGroup extends React.Component<ValidationGroupProps> {
+export default class CheckSome extends React.Component<CheckSomeProps> {
+  static Field = CheckSomeField;
+
   static childContextTypes = {
     values: PropTypes.object.isRequired,
     errors: PropTypes.object,
@@ -60,47 +104,5 @@ export class ValidationGroup extends React.Component<ValidationGroupProps> {
     const valid = !errors;
 
     return this.props.children({valid, errors});
-  }
-}
-
-type ValidationFieldProps<T> = {
-  name: string,
-  value: T,
-};
-
-type ValidationFieldChildProps = {
-  value: T,
-  errors: ValidationErrors | null,
-  touched: boolean,
-  valid: boolean,
-};
-
-export class ValidationField extends React.Component<ValidationFieldProps<*>> {
-  state = {
-    touched: false,
-  };
-
-  static contextTypes = {
-    values: PropTypes.object.isRequired,
-    errors: PropTypes.object,
-  };
-
-  markFieldTouched = () => {
-    this.setState({touched: true});
-  };
-
-  render() {
-    const {values, errors: formErrors} = this.context;
-    const {name} = this.props;
-    const {touched} = this.state;
-    const value = values[name];
-    const errors = formErrors ? formErrors[name] : null;
-    const valid = !errors;
-
-    return (
-      <div className="Validator" onBlur={this.markFieldTouched}>
-        {this.props.children({value, errors, touched, valid})}
-      </div>
-    );
   }
 }
