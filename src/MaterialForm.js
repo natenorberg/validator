@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {TextField, RaisedButton, Dialog} from 'material-ui';
-import {ValidationField, ValidationGroup} from './NewValidator';
+import CheckSome from './CheckSome';
 import formatMessage from './formatMessage';
 
 type ValidationErrors = {[key: string]: Object}; // TODO: Check object shape somehow
@@ -104,7 +104,7 @@ export class Form extends React.Component<{}, FormState> {
     const {name, favoriteBeer, age} = this.state;
 
     return (
-      <ValidationGroup
+      <CheckSome
         rules={{
           name: [requiredField('Name')],
           favoriteBeer: [requiredField('Favorite beer'), noLiteBeer],
@@ -114,7 +114,7 @@ export class Form extends React.Component<{}, FormState> {
       >
         {({valid}) => (
           <div className="Form">
-            <ValidationField name="name">
+            <CheckSome.Field name="name">
               {({value, errors, touched, valid}) => (
                 <div className="field">
                   {this.renderStatusEmoji(valid)}
@@ -126,8 +126,8 @@ export class Form extends React.Component<{}, FormState> {
                   />
                 </div>
               )}
-            </ValidationField>
-            <ValidationField name="favoriteBeer">
+            </CheckSome.Field>
+            <CheckSome.Field name="favoriteBeer">
               {({value, errors, touched, valid}) => (
                 <div className="field">
                   {this.renderStatusEmoji(valid)}
@@ -139,8 +139,8 @@ export class Form extends React.Component<{}, FormState> {
                   />
                 </div>
               )}
-            </ValidationField>
-            <ValidationField name="age">
+            </CheckSome.Field>
+            <CheckSome.Field name="age">
               {({value, errors, touched, valid}) => (
                 <div className="field">
                   {this.renderStatusEmoji(valid)}
@@ -153,7 +153,7 @@ export class Form extends React.Component<{}, FormState> {
                   />
                 </div>
               )}
-            </ValidationField>
+            </CheckSome.Field>
             <div>
               <RaisedButton
                 label="Submit"
@@ -173,7 +173,7 @@ export class Form extends React.Component<{}, FormState> {
             </Dialog>
           </div>
         )}
-      </ValidationGroup>
+      </CheckSome>
     );
   }
 }
