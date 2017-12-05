@@ -56,10 +56,15 @@ const noLiteBeer = (beer: string) => {
   }
 };
 
+const initialValues = {
+  name: 'Nate',
+  favoriteBeer: 'Some kind of IPA',
+  age: 26,
+};
+
 export class Form extends React.Component<{}, FormState> {
   state = {
-    name: '',
-    favoriteBeer: '',
+    ...initialValues,
     submitted: false,
   };
 
@@ -111,8 +116,9 @@ export class Form extends React.Component<{}, FormState> {
           age: [requiredField('Age'), legalDrinker],
         }}
         values={{name, favoriteBeer, age}}
+        initialValues={initialValues}
       >
-        {({valid}) => (
+        {({valid, changed}) => (
           <div className="Form">
             <CheckSome.Field name="name">
               {({value, errors, touched, valid}) => (
@@ -161,9 +167,11 @@ export class Form extends React.Component<{}, FormState> {
                 primary
                 style={{marginTop: 8}}
                 onClick={this.submitForm}
-                disabled={!valid}
+                disabled={!valid || !changed}
               />
             </div>
+
+            {!changed && "The form hasn't changed"}
 
             <Dialog
               open={this.state.submitted}
