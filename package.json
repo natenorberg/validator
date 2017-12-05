@@ -8,6 +8,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "flow-bin": "^0.59.0",
+    "lodash": "^4.17.4",
     "material-ui": "^0.19.4",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",

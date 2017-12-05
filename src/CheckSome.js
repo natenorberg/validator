@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 
 const CHECK_SOME_CONTEXT = '__check_some__';
 
@@ -55,10 +56,12 @@ export class CheckSomeField extends React.Component<CheckSomeFieldProps<*>> {
 export type CheckSomeProps = {
   rules: ValidationGroupRules,
   values: Object, // TODO: Get a better type here
+  initialValues: Object,
 };
 
 export type CheckSomeChildProps = {
   valid: boolean,
+  changed: boolean,
   errors: {[name: string]: ValidationErrors} | null,
 };
 
@@ -102,9 +105,12 @@ export default class CheckSome extends React.Component<CheckSomeProps> {
     }, null);
 
   render() {
+    const {values, initialValues} = this.props;
+
     const errors = this.getErrors();
     const valid = !errors;
+    const changed = !isEqual(values, initialValues);
 
-    return this.props.children({valid, errors});
+    return this.props.children({valid, errors, changed});
   }
 }
