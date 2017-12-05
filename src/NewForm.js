@@ -54,6 +54,7 @@ const noLiteBeer = (beer: string) => {
   if (beer.toLowerCase().includes('lite')) {
     return {noLiteBeer: {}};
   }
+  return null;
 };
 
 const initialValues = {
@@ -68,15 +69,15 @@ export class Form extends React.Component<{}, FormState> {
     submitted: false,
   };
 
-  setName = (e: SyntheticInputEvent, name: string) => {
+  setName = (e: SyntheticInputEvent<>, name: string) => {
     this.setState(() => ({name}));
   };
 
-  setFavoriteBeer = (e: SyntheticInputEvent, favoriteBeer: string) => {
+  setFavoriteBeer = (e: SyntheticInputEvent<>, favoriteBeer: string) => {
     this.setState(() => ({favoriteBeer}));
   };
 
-  setAge = (e: SyntheticInputEvent, ageString: string) => {
+  setAge = (e: SyntheticInputEvent<>, ageString: string) => {
     const age = ageString === '' ? 0 : parseInt(ageString);
     if (!isNaN(age)) {
       this.setState(() => ({age}));
@@ -97,7 +98,7 @@ export class Form extends React.Component<{}, FormState> {
     }
 
     return Object.keys(errors).map(key => {
-      const error = errors[key];
+      const error = errors && errors[key];
 
       return <div style={errorTextStyle}>{formatMessage(messages[key], error)}</div>;
     });
@@ -116,7 +117,6 @@ export class Form extends React.Component<{}, FormState> {
           age: [requiredField('Age'), legalDrinker],
         }}
         values={{name, favoriteBeer, age}}
-        initialValues={initialValues}
       >
         {({valid, changed}) => (
           <div className="Form">

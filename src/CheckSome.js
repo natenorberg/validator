@@ -12,19 +12,23 @@ type ValidationRule<T> = (value: T) => ValidationErrors | null;
 type ValidationGroupRules = {[name: string]: Array<ValidationRule<*>>};
 type ValidationGroupErrors = {[name: string]: ValidationErrors};
 
-type CheckSomeFieldProps<T> = {
-  name: string,
-  value: T,
-};
-
-type CheckSomeFieldChildProps = {
+type CheckSomeFieldChildProps<T> = {
   value: T,
   errors: ValidationErrors | null,
   touched: boolean,
   valid: boolean,
 };
 
-export class CheckSomeField extends React.Component<CheckSomeFieldProps<*>> {
+type CheckSomeFieldProps = {
+  name: string,
+  children: (props: CheckSomeFieldChildProps<*>) => React.Node,
+};
+
+type CheckSomeFieldState = {
+  touched: boolean,
+};
+
+export class CheckSomeField extends React.Component<CheckSomeFieldProps, CheckSomeFieldState> {
   state = {
     touched: false,
   };
@@ -53,24 +57,26 @@ export class CheckSomeField extends React.Component<CheckSomeFieldProps<*>> {
   }
 }
 
-export type CheckSomeProps = {
-  rules: ValidationGroupRules,
-  values: Object, // TODO: Get a better type here
-  initialValues: Object,
-};
-
 export type CheckSomeChildProps = {
   valid: boolean,
   changed: boolean,
   errors: {[name: string]: ValidationErrors} | null,
 };
 
+export type CheckSomeProps = {
+  rules: ValidationGroupRules,
+  values: Object, // TODO: Get a better type here
+  initialValues?: Object,
+  children: (props: CheckSomeChildProps) => React.Node,
+};
+
 export default class CheckSome extends React.Component<CheckSomeProps> {
   static Field = CheckSomeField;
-
   static childContextTypes = {
     [CHECK_SOME_CONTEXT]: PropTypes.object.isRequired,
   };
+
+  initialValues: ?Object;
 
   getChildContext() {
     return {
@@ -80,6 +86,18 @@ export default class CheckSome extends React.Component<CheckSomeProps> {
       },
     };
   }
+
+  getInitialValues = () => {
+    if (this.props.initialValues) {
+      return this.props.initialValues;
+    }
+
+    if (!this.initialValues) {
+      this.initialValues = this.props.values;
+    }
+
+    return this.initialValues;
+  };
 
   getErrors = () =>
     Object.keys(this.props.rules).reduce((errors, key) => {
@@ -105,11 +123,11 @@ export default class CheckSome extends React.Component<CheckSomeProps> {
     }, null);
 
   render() {
-    const {values, initialValues} = this.props;
+    const {values} = this.props;
 
     const errors = this.getErrors();
     const valid = !errors;
-    const changed = !isEqual(values, initialValues);
+    const changed = !isEqual(values, this.getInitialValues());
 
     return this.props.children({valid, errors, changed});
   }

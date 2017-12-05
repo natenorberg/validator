@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import {TextField, RaisedButton, Dialog} from 'material-ui';
 import OldValidator, {requiredField} from './OldValidator';
