@@ -2,6 +2,8 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 
+const CHECK_SOME_CONTEXT = '__check_some__';
+
 type ValidationErrors = {[key: string]: Object}; // TODO: Check object shape somehow
 
 type ValidationRule<T> = (value: T) => ValidationErrors | null;
@@ -27,8 +29,7 @@ export class CheckSomeField extends React.Component<CheckSomeFieldProps<*>> {
   };
 
   static contextTypes = {
-    values: PropTypes.object.isRequired,
-    errors: PropTypes.object,
+    [CHECK_SOME_CONTEXT]: PropTypes.object.isRequired,
   };
 
   markFieldTouched = () => {
@@ -36,7 +37,7 @@ export class CheckSomeField extends React.Component<CheckSomeFieldProps<*>> {
   };
 
   render() {
-    const {values, errors: formErrors} = this.context;
+    const {values, errors: formErrors} = this.context[CHECK_SOME_CONTEXT];
     const {name} = this.props;
     const {touched} = this.state;
     const value = values[name];
@@ -65,14 +66,15 @@ export default class CheckSome extends React.Component<CheckSomeProps> {
   static Field = CheckSomeField;
 
   static childContextTypes = {
-    values: PropTypes.object.isRequired,
-    errors: PropTypes.object,
+    [CHECK_SOME_CONTEXT]: PropTypes.object.isRequired,
   };
 
   getChildContext() {
     return {
-      values: this.props.values,
-      errors: this.getErrors(),
+      [CHECK_SOME_CONTEXT]: {
+        values: this.props.values,
+        errors: this.getErrors(),
+      },
     };
   }
 
