@@ -77,6 +77,8 @@ component defining the render prop.
 
 * [ ] Hook up our apps to use it
 * [ ] Namespace context so there can be multiple forms in a hierarchy (or just to reduce collisions)
+* [ ] Fix flow issues
+* [ ] Add tests
 * [ ] Find a good name for it (`checkmate` was taken 😩)
 
 ## Nice to haves
