@@ -76,7 +76,7 @@ component defining the render prop.
 ## Things to do before open sourcing it
 
 * [ ] Hook up our apps to use it
-* [ ] Namespace context so there can be multiple forms in a hierarchy (or just to reduce collisions)
+* [x] Namespace context so there can be multiple forms in a hierarchy (or just to reduce collisions)
 * [ ] Fix flow issues
 * [ ] Add tests
 * [x] Find a good name for it (going with `check-some` for now)
