@@ -50,7 +50,7 @@ export class CheckSomeField extends React.Component<CheckSomeFieldProps, CheckSo
     const valid = !errors;
 
     return (
-      <div className="Validator" onBlur={this.markFieldTouched}>
+      <div className="CheckSomeField" onBlur={this.markFieldTouched}>
         {this.props.children({value, errors, touched, valid})}
       </div>
     );
@@ -70,6 +70,7 @@ export type CheckSomeProps = {
   children: (props: CheckSomeChildProps) => React.Node,
 };
 
+/* eslint-disable react/no-multi-comp */
 export default class CheckSome extends React.Component<CheckSomeProps> {
   static Field = CheckSomeField;
   static childContextTypes = {
@@ -127,6 +128,7 @@ export default class CheckSome extends React.Component<CheckSomeProps> {
 
     const errors = this.getErrors();
     const valid = !errors;
+
     const changed = !isEqual(values, this.getInitialValues());
 
     return this.props.children({valid, errors, changed});
